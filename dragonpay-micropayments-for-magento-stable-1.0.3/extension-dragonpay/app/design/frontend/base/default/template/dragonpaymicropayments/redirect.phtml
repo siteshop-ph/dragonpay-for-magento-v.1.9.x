@@ -1,0 +1,505 @@
+<?php
+
+
+
+
+        
+       // For check purpose: you have also to disable this line very below:  header("Location: $url_request_params");
+       
+      
+
+// Retrieve order increment id
+$orderIncrementId = Mage::getSingleton('checkout/session')->getLastRealOrderId();
+
+$merchantTxnId = $orderIncrementId;
+
+
+// For check purpose: you have also to disable this line below:  header("Location: $url_request_params");
+     //echo $merchantTxnId;
+
+
+
+
+
+
+//Ref:  http://www.tricksofit.com/2014/10/get-order-details-from-order-id-in-magento#.VFeqIoXkirA
+  // to get real order ID ?
+  $orderId = Mage::getModel('sales/order')
+             ->loadByIncrementId($orderIncrementId)
+             ->getEntityId();
+
+
+  // get order details
+  $order = Mage::getModel('sales/order')->loadByIncrementId($orderIncrementId);
+
+  
+  $email = $order->getCustomerEmail();
+
+  // For check purpose: you have also to disable this line below:  header("Location: $url_request_params");
+  //echo $email;  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// db connection
+$connection_to_db = Mage::getSingleton('core/resource')->getConnection('core_write');
+$tablePrefix = (string) Mage::getConfig()->getTablePrefix();   // added for table prefix support
+$tablePrefix_core_config_data = $tablePrefix . 'core_config_data';
+
+
+
+$merchantId = $connection_to_db->fetchOne("SELECT value FROM $tablePrefix_core_config_data WHERE path='payment/dragonpaymicropayments/merchant_id'");
+
+$dragonpaymicropayments_api_password = $connection_to_db->fetchOne("SELECT value FROM $tablePrefix_core_config_data WHERE path='payment/dragonpaymicropayments/api_password'");
+
+$dragonpaymicropayments_param2 = $connection_to_db->fetchOne("SELECT value FROM $tablePrefix_core_config_data WHERE path='payment/dragonpaymicropayments/shopping_cart_id'");
+
+
+
+
+//for test     you have also to disable this line below:  header("Location: $url_request_params");
+    //echo "merchantId:  ". $merchantId;
+    //echo "dragonpaymicropayments_api_password:  ". $dragonpaymicropayments_api_password;     // IMPORTANT MAKE IT FALSE BEFORE TO ECHO
+   //echo "dragonpaymicropayments_param2:  ". $dragonpaymicropayments_param2;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////  START :   Send billing info to Dragonpay (Via SOAP/xml) , needed for credit card transaction    ///////////////////////////////////////////////////////////////////////
+
+
+
+     // Use the sandbox if you're testing. (Required: Sandbox Account with Dragonpay)
+	if (Mage::getStoreConfig('payment/dragonpaymicropayments/test_mode')){
+		 // TEST.
+		$urlWebService = 'http://test.dragonpay.ph/DragonpayWebService/MerchantService.asmx';                            
+
+	}else{
+		 // LIVE
+		$urlWebService = 'https://secure.dragonpay.ph/DragonPayWebService/MerchantService.asmx';                
+	}
+
+
+
+
+
+       // for hard coded test
+              //$urlWebService = "http://test.dragonpay.ph/DragonpayWebService/MerchantService.asmx";
+
+
+
+        
+     
+ 
+
+
+
+
+// get billing Address object
+$billing_address = $order->getBillingAddress();
+
+
+  // For check purpose:     you have also to disable this line below:  header("Location: $url_request_params");
+            //get all the available elements of the object
+           // print_r($billing_address->getData());     
+
+
+
+  // get String for :
+        $firstName = $billing_address->getFirstname();
+        $lastName = $billing_address->getLastname();
+        $address1 = $billing_address->getStreet()[0] ;       // to get string 1 (street1)      
+           //$address1 = implode("\n", $billing_address->getStreet());           // in case we want to to combine both items (street1 & street2 in one single string        
+        $address2 = $billing_address->getStreet()[1] ;        // to get string 2 (street2)
+        $city = $billing_address->getCity();
+        $state = $billing_address->getRegion();
+        $country = $billing_address->getCountry_id();
+        $zipCode = $billing_address->getPostcode();
+        $telNo = $billing_address->getTelephone();
+        $email = $billing_address->getEmail();
+
+
+
+  // For check purpose:     you have also to disable this line below:  header("Location: $url_request_params");
+
+ /*
+         echo "urlWebService:  " . $urlWebService . "<br><br>";
+          echo "merchantId:  " . $merchantId . "<br><br>";
+          echo "merchantTxnId:  " . $merchantTxnId . "<br><br>";
+          echo "firstName:  " . $firstName . "<br><br>";
+          echo "lastName:  " . $lastName . "<br><br>";
+          echo "address1:  " . $address1 . "<br><br>";                   
+          echo "address2:  " . $address2 . "<br><br>";
+          echo "city:  " . $city . "<br><br>";
+          echo "state:  " . $state . "<br><br>";
+          echo "country:  " . $country . "<br><br>";
+          echo "zipCode:  " . $zipCode . "<br><br>";
+          echo "telNo:  " . $telNo . "<br><br>";
+          echo "email:  " . $email . "<br><br>";
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+        // xml post structure
+
+        $xml_post_string = '<?xml version="1.0" encoding="utf-8"?>
+                               <soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+                                  <soap12:Body>
+                                     <SendBillingInfo xmlns="http://api.dragonpay.ph/">
+                                         <merchantId>' . $merchantId . '</merchantId>
+                                         <merchantTxnId>' . $merchantTxnId . '</merchantTxnId>
+                                         <firstName>' . $firstName . '</firstName>
+                                         <lastName>' . $lastName . '</lastName>
+                                         <address1>' . $address1 . '</address1>
+                                         <address2>' . $address1 . '</address2>
+                                         <city>' . $city . '</city>
+                                         <state>' . $state . '</state>
+                                         <country>' . $country . '</country>
+                                         <zipCode>' . $zipCode . '</zipCode>
+                                         <telNo>' . $telNo . '</telNo>
+                                         <email>' . $email . '</email>
+                                     </SendBillingInfo>
+                                   </soap12:Body>
+                                </soap12:Envelope>';
+
+
+ 
+
+           $headers = array(
+                        "Content-type: application/soap+xml;charset=\"utf-8\"",
+                        //"Accept: application/soap+xml",
+                        "Cache-Control: no-cache",
+                        "Pragma: no-cache",
+                        //"SOAPAction: http://test.dragonpay.ph/DragonpayWebService/MerchantService.asmx", 
+                        "Content-length: ".strlen($xml_post_string),
+                    ); 
+
+     
+
+
+            
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($ch, CURLOPT_URL, $urlWebService);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+              //curl_setopt($ch, CURLOPT_USERPWD, $soapUser.":".$soapPassword); // username and password - declared at the top of the doc
+            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $xml_post_string); 
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+
+
+
+            // purge old values if there are
+            $response = "";
+            $response1 = "";
+            $response2 = "";
+            $parser = "";
+            $SendBillingInfoResult = "" ;
+
+
+
+            // send the request to dragonpay
+            $response = curl_exec($ch); 
+            
+            // close connection
+            curl_close($ch);
+
+
+
+
+            // remove <soap:Body> tags
+            $response1 = str_replace("<soap:Body>","",$response);
+            $response2 = str_replace("</soap:Body>","",$response1);
+
+
+
+            // converting to XML
+            $parser = simplexml_load_string($response2);
+            // user $parser to get your data out of XML response and to display it.
+
+
+           // SendBillingInfoResult            if  result is "0" it's OK          if result is "-1"             it's WRONG                (we can only submit once with same $merchantTxnId)
+           $SendBillingInfoResult = $parser->SendBillingInfoResponse[0]->SendBillingInfoResult ;
+              // this can work as well
+                //$SendBillingInfoResult = $parser->SendBillingInfoResponse->SendBillingInfoResult ;
+            
+          
+    
+
+              // For check purpose:      you have also to disable this line below:  header("Location: $url_request_params");
+                    //  echo "SendBillingInfoResult:  " . $SendBillingInfoResult . "<br><br>";
+                      
+                   
+
+           
+
+
+
+//////////////////////////////  END :   Send billing info to Dragonpay (Via SOAP/xml) , needed for credit card transaction    ///////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+                                 // Get hostname 
+  $description = 'Your Order on '.Mage::app()->getFrontController()->getRequest()->getHttpHost();     
+              // Other options for $description
+                  //Get Main store URL: 
+                            // to get without index.php at the end (nevermind if SEO optimization (url rewrite is enable or not, it will be always without index.php at the end):
+                           //Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+                               // OR 
+                           //Mage::getBaseUrl();
+                              // OR to get with index.php/ if  SEO optimization is disabled and to get without index.php if SEO optimization is enabled:
+                          //Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK);
+
+                 //Store Home Url:
+                     // Mage::app()->getStore()->getHomeUrl();
+
+                //Store Name:
+                    // Mage::app()->getStore()->getName();
+
+
+
+ // For check purpose: you have also to disable this line below:  header("Location: $url_request_params");
+ //echo $description;
+
+
+
+
+
+
+
+
+  // To get order total value
+   $amount = number_format ($order->getGrandTotal(), 2, '.' , $thousands_sep = '');
+   // N.B. : this kind of format do not work:  number_format($this->amount, 2, '.', '');
+
+
+   // For check purpose: you have also to disable this line below:  header("Location: $url_request_params");
+   //echo $amount;
+
+
+
+
+
+
+   
+   $ccy = Mage::app()->getStore()->getCurrentCurrencyCode();
+
+   // For check purpose: you have also to disable this line below:  header("Location: $url_request_params");
+   //echo $ccy;
+
+
+
+
+
+
+
+
+
+
+      // Use the sandbox if you're testing. (Required: Sandbox Account with Dragonpay)
+	if (Mage::getStoreConfig('payment/dragonpaymicropayments/test_mode')){
+		  // TEST
+		$url = 'http://test.dragonpay.ph/Pay.aspx';                            
+
+	}else{
+		  // LIVE
+		$url = 'https://gw.dragonpay.ph/Pay.aspx';                
+	}
+
+
+
+      // For check purpose: you have also to disable this line below:  header("Location: $url_request_params");
+      //echo $url;
+
+
+
+
+
+
+
+
+
+
+
+
+
+              // purge old values if there are
+              $digest_str = "";
+              $digest = "";
+              $request_params = "";
+              $url_request_params = "";
+              $param1 = "";
+              $param2 = "";
+              $mode = "";    
+
+
+
+              // create the digest for Dragonpay
+              $digest_str = $merchantId.':'.$merchantTxnId.':'.$amount.':'.$ccy.':'.$description.':'.$email.':'.$dragonpaymicropayments_api_password ;
+
+     
+                      // to create 40 Char sha1
+                      $digest = sha1($digest_str, $raw_output = false);
+
+
+
+
+
+                    // For check purpose: you have also to disable this line below:  header("Location: $url_request_params");
+                   
+                         //ATTENTION THIS VARIABLE ($digest_str) HAVE API PASSWORD IN LAST FIELD, SO CHANGE TO A FAKE VALUE IN MAGNETO ADMIN INTERFACE: system/Configuration/Payment methods/Dragonpay BEFORE TO ECHO!!!!
+                               //echo $digest_str; 
+
+                        //echo $digest;
+
+
+
+
+
+                     // As per Dragonpay requirement, param1 & param2 are not used to create the above digest
+                        /** As by default ordertotal is not posted back by Dragonpay, so, it's just more easy to use available custom param that will be posted back to us by Dragonpay, ordertotal is not only tickets sum in the order, but it's take also consideration of discout/coupon  */
+                       $param1 = $amount;  
+                       $param2 = $dragonpaymicropayments_param2;
+
+
+
+
+
+
+                   // get "dragonpay_filtering_mode" cookie value  
+                  $mode = Mage::getModel('core/cookie')->get('dragonpay_filtering_mode') ;     
+                  
+              
+              
+                                   
+                                    if ( $mode > 0 ) {             // posted from Magento Native OPC in app/design/frontend/base/default/template/checkout/onepage/payment/methods.phtml  
+                          
+                                     
+                                     // case we send Dragonpay parameter WITH FILTERING (mode) PARAMETER
+
+
+
+
+              // Let's prepare the send to Dragonpay:   using urlencode to get URL format
+                  $request_params = "merchantid=" . urlencode($merchantId) .
+		      "&txnid=" .  urlencode($merchantTxnId) . 
+		      "&amount=" . urlencode($amount) .
+		      "&ccy=" . urlencode($ccy) .
+		      "&description=" . urlencode($description) .
+		      "&email=" . urlencode($email) .
+		      "&digest=" . urlencode($digest) .
+              "&param1=" . urlencode($param1) .
+               "&param2=" . urlencode($param2) .
+                "&mode=" . urlencode($mode);    
+
+
+
+
+                             } else {
+                                  
+    
+    
+                                  // Case :   no "mode" parameters    send to dragonpay
+    
+    
+              // Let's prepare the send to Dragonpay:   using urlencode to get URL format
+                  $request_params = "merchantid=" . urlencode($merchantId) .
+		      "&txnid=" .  urlencode($merchantTxnId) . 
+		      "&amount=" . urlencode($amount) .
+		      "&ccy=" . urlencode($ccy) .
+		      "&description=" . urlencode($description) .
+		      "&email=" . urlencode($email) .
+		      "&digest=" . urlencode($digest) .
+               "&param1=" . urlencode($param1) .
+               "&param2=" . urlencode($param2);
+
+    
+                            }
+               
+                    
+                    
+                    
+
+
+
+
+
+
+                $url_request_params = $url .'?'. $request_params;
+
+   
+
+               // For check purpose:       you have also to disable this line below:  header("Location: $url_request_params");
+                     //echo $url_request_params;
+
+
+
+
+
+
+                // Let's go to Dragonpay website
+                //$url_request_params = str_replace('preparse', "index", $url_request_params); # optional (can work without this line)
+
+                   
+
+
+                    header("Location: $url_request_params");       // disable this line for TEST
+
+                     
+                    exit;
+
+
+
+
+
+
+
+?>
