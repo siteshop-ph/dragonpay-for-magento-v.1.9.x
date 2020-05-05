@@ -1,0 +1,230 @@
+<?xml version="1.0"?>
+<config>
+  <sections>
+    <payment>
+      <groups>
+        <dragonpay translate="label comment" module="dragonpay">
+          <label>Dragonpay Standard</label>
+          <frontend_type>text</frontend_type>
+          <sort_order>100</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+
+          <fields>
+
+
+           <extension_page>
+              <comment><![CDATA[<a href='https://siteshop.ph/dragonpay-extension-for-magento'target='_blank'>https://siteshop.ph/dragonpay-extension-for-magento</a></ br> At this link you can check in "ChangeLog" Tab if there is a new version released.]]></comment>              
+              <label>Extension Page</label>
+              <frontend_type>label</frontend_type>
+              <sort_order>3</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>             
+           </extension_page>
+
+
+
+           <extension_version>
+              <comment>1.0.6</comment>
+              <label>Version Installed</label>
+              <frontend_type>label</frontend_type>
+              <sort_order>5</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>             
+           </extension_version>
+
+
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>10</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </active>
+
+
+            <title translate="label">
+              <label>Title</label>
+              <comment>Label Displayed at Checkout</comment>
+              <frontend_type>text</frontend_type>
+              <sort_order>20</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </title>
+
+         <merchant_id translate="label comment">
+              <label>Dragonpay Merchant ID</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>40</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+              <validate>validate-length minimum-length-1 maximum-length-80 required-entry</validate>
+         </merchant_id>
+
+         <api_password translate="label">
+              <label>Dragonpay API Password</label>
+              <frontend_type>password</frontend_type>
+              <sort_order>50</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+              <validate>validate-length minimum-length-1 maximum-length-80 required-entry</validate>
+          </api_password>
+
+
+         <test_mode translate="label">
+            <label>Test mode?</label>
+            <comment>Use your Dragonpay test account?</comment>
+            <frontend_type>select</frontend_type>
+            <source_model>adminhtml/system_config_source_yesno</source_model>
+            <sort_order>60</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>0</show_in_store>
+         </test_mode>
+
+
+
+            <order_status translate="label">
+              <label>New Order Status</label>
+              <comment>Must be "Pending"</comment>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_order_status</source_model>
+              <sort_order>70</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </order_status>
+
+
+            <allowspecific translate="label">
+              <label>Payment Applicable From</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>80</sort_order>
+              <source_model>adminhtml/system_config_source_payment_allspecificcountries</source_model>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </allowspecific>
+
+
+            <specificcountry translate="label">
+              <label>Countries Payment Applicable From</label>
+              <frontend_type>multiselect</frontend_type>
+              <sort_order>90</sort_order>
+              <source_model>adminhtml/system_config_source_country</source_model>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+              <depends>
+                <allowspecific>1</allowspecific>
+              </depends>
+            </specificcountry>
+
+
+
+            <sort_order translate="label">
+              <label>Sort Order</label>
+              <frontend_type>text</frontend_type>
+              <comment>During the checkout, Payment methods are displayed based on sort order value, zero mean it's will be displayed at the top</comment>
+              <sort_order>100</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </sort_order>
+
+
+
+           <notification_parser>
+            <label>Dragonpay Notification Parser (DNP)</label>
+            <comment>Only set this to NO when you want to test CRON_GetMerchantTxns.php to check that transactions and order status update in Magento can also be done from the cron job</comment>
+            <frontend_type>select</frontend_type>
+            <source_model>adminhtml/system_config_source_yesno</source_model>
+            <sort_order>110</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>0</show_in_store>
+           </notification_parser>
+
+
+
+           <shopping_cart_id>
+              <label>Shopping Cart ID (optional)</label>
+              <comment>Shopping Cart ID</comment>
+              <frontend_type>text</frontend_type>
+              <sort_order>120</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+              <validate>validate-length minimum-length-1 maximum-length-80</validate>
+           </shopping_cart_id>
+
+
+
+
+          <min_order_total translate="label">
+                <label>Minimum Order Total (optional)</label>
+                <frontend_type>text</frontend_type>
+                <sort_order>122</sort_order>
+                <show_in_default>1</show_in_default>
+                <show_in_website>1</show_in_website>
+                <show_in_store>0</show_in_store>
+          </min_order_total>
+           
+
+
+           <max_order_total translate="label">
+               <label>Maximum Order Total (optional)</label>
+               <frontend_type>text</frontend_type>
+               <sort_order>123</sort_order>
+               <show_in_default>1</show_in_default>
+               <show_in_website>1</show_in_website>
+               <show_in_store>0</show_in_store>
+           </max_order_total>
+
+
+
+
+
+           <public_key>
+              <frontend_type>hidden</frontend_type>
+              <sort_order>130</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>             
+           </public_key>
+
+
+           <license_data>
+              <frontend_type>hidden</frontend_type>
+              <sort_order>140</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>             
+           </license_data>
+
+
+           <status>
+              <frontend_type>hidden</frontend_type>
+              <sort_order>150</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>             
+           </status>
+
+
+
+
+          </fields>
+        </dragonpay>
+      </groups>
+    </payment>
+  </sections>
+</config>

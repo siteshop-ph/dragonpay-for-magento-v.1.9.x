@@ -1,0 +1,151 @@
+<?php
+/*
+DRAGONPAY STANDARD
+
+Controlling the Payment Channels Selection Page
+--------------------------------------------------------------
+There may be instances wherein the merchant would want to filter the payment
+channels that they want to appear in Dragonpay’s payment selection page, or they
+may want to skip the Dragonpay page altogether and go straight to the payment
+details for a specific channel. There is limited support for these features and this
+section discusses them in detail.
+
+Filtering Payment Channels
+-------------------------------------
+Dragonpay payment channels are grouped together by type – ex. Online banking,
+Over-the-Counter/ATM, etc. Merchants can programmatically instruct Dragonpay
+which grouping to show when the user is redirected to the payment gateway by
+using the “mode” parameter.
+*/
+
+
+
+
+
+
+
+////////////    Filtering Payment Channels   ////////////////////////////////
+
+$filtering_enable = "1";           //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+                                                            // if DISABLED:  at dragonpay website/form, the payment channels dropdown list will not be filtered and will display all channels 
+
+
+
+
+
+
+
+// All BELLOW PARAMETERS WILL  ONLY APPLY IF THE ABOVE PARAMETER ($enable_dragonpay_mode_filtering), IS ENABLED
+
+
+
+
+////////////    GROUP:   Credit Cards   ////////////////////////////////
+/////////  IMPORTANT :  You need first to contact Dragonpay and ask them to enable Credit Cards transaction at your Dragonpay account !!     ////////// 
+$group_credit_cards_enable = "0";          //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_credit_cards_title = "Credit Cards";
+$group_credit_cards_title_font_html_color = "#2B547E"; // html color code for the title
+$group_credit_cards_enable_logo = "1";          //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_credit_cards_logo_path = "dragonpay/credit-cards.jpeg";    // relative path from YOUR-MAGENTO/MEDIA/  folder   ;    IF you want a custom logo place it in YOUR-MAGENTO/MEDIA/DRAGONPAY/CUSTOM/  folder & use here parameter like this:    $group_credit_cards_logo_path = "dragonpay/custom/my-custom-logo-file-name.png"
+$group_credit_cards_enable_description = "0";    //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_credit_cards_logo_description_enable_popup = "0";   //  "1" for ENABLE   (when enabled: bellow description content will be displayed at the logo Mouseover ; Above logo display parameter must be enabled)  ;    "0"  or  different than "1" for DISABLE    
+$group_credit_cards_description = "";    // Description content here  like:    "My-Description"
+$group_credit_cards_description_font_html_color = "#2B547E"; // html color code for the group description
+
+
+
+////////////    GROUP:   Online Banking   ////////////////////////////////
+$group_online_banking_enable = "1";               //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_online_banking_title = "Online Banking";
+$group_online_banking_title_font_html_color = "#2B547E"; // html color code for the title
+$group_online_banking_enable_logo = "1";        //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_online_banking_logo_path = "dragonpay/online-banking.jpeg";     // relative path from YOUR-MAGENTO/MEDIA/  folder   ;    IF you want a custom logo place it in YOUR-MAGENTO/MEDIA/DRAGONPAY/CUSTOM/  folder & use here parameter like this:    $group_online_banking_logo_path  = "dragonpay/custom/my-custom-logo-file-name.png"
+$group_online_banking_enable_description = "1";    //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_online_banking_logo_description_enable_popup = "1";   //  "1" for ENABLE   (when enabled: bellow description content will be displayed at the logo Mouseover ; Above logo display parameter must be enabled)  ;    "0"  or  different than "1" for DISABLE    
+$group_online_banking_description = "Dragonpay Prepaid Credit, BDO Internet Banking (Fund Transfer), BDO Corp Internet Banking, BPI ExpressOnline/Mobile (Fund Transfer), BPI ExpressOnline (Bills Payment - new), Chinabank Online, Metrobankdirect, RCBC AccessOne, Unionbank of the Philippines EON, Unionbank of the Philippines and UCPB Connect.";       // Description content here  like:    "My-Description"
+$group_online_banking_description_font_html_color = "#2B547E"; // html color code for the group description
+
+
+
+////////////    GROUP:   Over-the-Counter Banking and ATM   ////////////////////////////////
+$group_over_the_counter_banking_and_ATM_enable = "1";         //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_over_the_counter_banking_and_ATM_title = "Over-the-Counter Banking and ATM";
+$group_over_the_counter_banking_and_ATM_title_font_html_color = "#2B547E"; // html color code for the title
+$group_over_the_counter_banking_and_ATM_enable_logo = "1";         //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_over_the_counter_banking_and_ATM_logo_path = "dragonpay/otc-banking.jpeg";         // relative path from YOUR-MAGENTO/MEDIA/  folder   ;    IF you want a custom logo place it in YOUR-MAGENTO/MEDIA/DRAGONPAY/CUSTOM/  folder & use here parameter like this:    $group_over_the_counter_banking_and_ATM_logo_path = "dragonpay/custom/my-custom-logo-file-name.png"
+$group_over_the_counter_banking_and_ATM_enable_description = "1";    //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_over_the_counter_banking_and_ATM_logo_description_enable_popup = "1";   //  "1" for ENABLE   (when enabled: bellow description content will be displayed at the logo Mouseover ; Above logo display parameter must be enabled)  ;    "0"  or  different than "1" for DISABLE    
+$group_over_the_counter_banking_and_ATM_description = "Banco de Oro ATM, Banco de Oro Over-the-counter, BPI Over-the-Counter, Chinabank Over-the-Counter, EastWest Bank Over-the-Counter, Landbank Over-the-Counter, Metrobank Over-the-Counter, PNB e-Banking Bills Payment, PNB Over-the-Counter/ATM/e-Banking, PNB Over-the-Counter Bills Payment, RCBC Over-the-Counter, Robinsons Bank Over-the-Counter, Sterling Bank Over-the-Counter/e-Banking, Bank OTC/ATM/Online, Unionbank ATM, Unionbank Over-the-Counter and UCPB Over-the-Counter/ATM.";       // Description content here  like:    "My-Description"
+$group_over_the_counter_banking_and_ATM_description_font_html_color = "#2B547E"; // html color code for the group description
+
+
+
+////////////    GROUP:   Over-the-Counter non-Bank   ////////////////////////////////
+$group_over_the_counter_non_bank_enable = "1";         //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_over_the_counter_non_bank_title = "Over-the-Counter non-Bank";
+$group_over_the_counter_non_bank_title_font_html_color = "#2B547E"; // html color code for the title
+$group_over_the_counter_non_bank_enable_logo = "1";          //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_over_the_counter_non_bank_logo_path = "dragonpay/otc-non-bank.jpeg";   // relative path from YOUR-MAGENTO/MEDIA/  folder   ;    IF you want a custom logo place it in YOUR-MAGENTO/MEDIA/DRAGONPAY/CUSTOM/  folder & use here parameter like this:    $group_over_the_counter_non_bank_logo_path = "dragonpay/custom/my-custom-logo-file-name.png"
+$group_over_the_counter_non_bank_enable_description = "1";    //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_over_the_counter_non_bank_logo_description_enable_popup = "1";   //  "1" for ENABLE   (when enabled: bellow description content will be displayed at the logo Mouseover ; Above logo display parameter must be enabled)  ;    "0"  or  different than "1" for DISABLE    
+$group_over_the_counter_non_bank_description = "Bayad Center, Cebuana Lhuillier Bills Payment, ECPay (Pawnshops, Payment Centers), LBC, Robinsons Dept Store, RuralNet Banks and Coops and SM Dept/Supermarket/Savemore Counter.";   // Description content here  like:    "My-Description"
+$group_over_the_counter_non_bank_description_font_html_color = "#2B547E"; // html color code for the group description
+
+
+
+////////////    GROUP:   PayPal   ////////////////////////////////
+/////////  IMPORTANT :  You need first to contact Dragonpay and ask them to enable Paypal at your Dragonpay account !!     ////////// 
+$group_paypal_enable = "0";          //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_paypal_title = "Paypal";
+$group_paypal_title_font_html_color = "#2B547E"; // html color code for the title
+$group_paypal_enable_logo = "1";          //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_paypal_logo_path = "dragonpay/paypal.png";   // relative path from YOUR-MAGENTO/MEDIA/  folder   ;    IF you want a custom logo place it in YOUR-MAGENTO/MEDIA/DRAGONPAY/CUSTOM/  folder & use here parameter like this:    $group_paypal_logo_path = "dragonpay/custom/my-custom-logo-file-name.png"
+$group_paypal_enable_description = "0";    //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_paypal_logo_description_enable_popup = "0";   //  "1" for ENABLE   (when enabled: bellow description content will be displayed at the logo Mouseover ; Above logo display parameter must be enabled)  ;    "0"  or  different than "1" for DISABLE    
+$group_paypal_description = "";     // Description content here  like:    "My-Description"
+$group_paypal_description_font_html_color = "#2B547E"; // html color code for the group description
+
+
+
+////////////    GROUP:   Mobile Payment   ////////////////////////////////
+$group_mobile_enable = "0";          //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_mobile_title = "Mobile";
+$group_mobile_title_font_html_color = "#2B547E"; // html color code for the title
+$group_mobile_enable_logo = "0";          //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_mobile_logo_path = "";   // relative path from YOUR-MAGENTO/MEDIA/  folder   ;    IF you want a custom logo place it in YOUR-MAGENTO/MEDIA/DRAGONPAY/CUSTOM/  folder & use here parameter like this:    $group_mobile_logo_path = "dragonpay/custom/my-custom-logo-file-name.png"
+$group_mobile_enable_description = "1";    //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_mobile_logo_description_enable_popup = "1";   //  "1" for ENABLE   (when enabled: bellow description content will be displayed at the logo Mouseover ; Above logo display parameter must be enabled)  ;    "0"  or  different than "1" for DISABLE    
+$group_mobile_description = "Globe GCash, BPI BanKO and Smart Carrier Billing";      // Description content here  like:    "My-Description"
+$group_mobile_description_font_html_color = "#2B547E"; // html color code for the group description
+
+
+
+////////////    GROUP:   International OTC   ////////////////////////////////
+$group_international_OTC_enable = "0";          //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_international_OTC_title = "International OTC";
+$group_international_OTC_title_font_html_color = "#2B547E"; // html color code for the title
+$group_international_OTC_enable_logo = "0";          //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_international_OTC_logo_path = "";   // relative path from YOUR-MAGENTO/MEDIA/  folder   ;    IF you want a custom logo place it in YOUR-MAGENTO/MEDIA/DRAGONPAY/CUSTOM/  folder & use here parameter like this:    $group_international_OTC_logo_path = "dragonpay/custom/my-custom-logo-file-name.png"
+$group_international_OTC_enable_description = "0";    //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_international_OTC_logo_description_enable_popup = "0";   //  "1" for ENABLE   (when enabled: bellow description content will be displayed at the logo Mouseover ; Above logo display parameter must be enabled)  ;    "0"  or  different than "1" for DISABLE    
+$group_international_OTC_description = "I-Remit";      // Description content here  like:    "My-Description"
+$group_international_OTC_description_font_html_color = "#2B547E"; // html color code for the group description
+
+
+
+////////////    GROUP:   Full Channels List   ////////////////////////////////
+$group_full_channels_enable = "0";         //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_full_channels_title = "Full access to all Dragonpay's payment channels";
+$group_full_channels_title_font_html_color = "#2B547E"; // html color code for the title
+$group_full_channels_enable_logo = "0";          //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_full_channels_logo_path = "";   // relative path from YOUR-MAGENTO/MEDIA/  folder   ;    IF you want a custom logo place it in YOUR-MAGENTO/MEDIA/DRAGONPAY/CUSTOM/  folder & use here parameter like this:    $group_full_channels_logo_path = "dragonpay/custom/my-custom-logo-file-name.png"
+$group_full_channels_enable_description = "0";    //      "1" for ENABLE      ;    "0"  or  different than "1" for DISABLE
+$group_full_channels_logo_description_enable_popup = "0";   //  "1" for ENABLE   (when enabled: bellow description content will be displayed at the logo Mouseover ; Above logo display parameter must be enabled)  ;    "0"  or  different than "1" for DISABLE    
+$group_full_channels_description = "";      // Description content here  like:    "My-Description"
+$group_full_channels_description_font_html_color = "#2B547E"; // html color code for the group description
+
+
+
+
+
+?>

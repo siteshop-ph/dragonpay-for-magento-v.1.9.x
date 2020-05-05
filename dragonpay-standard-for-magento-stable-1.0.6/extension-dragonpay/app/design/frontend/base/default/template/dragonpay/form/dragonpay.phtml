@@ -1,0 +1,464 @@
+<?php $_code=$this->getMethodCode() ?>
+
+
+
+
+
+<?php
+if (file_exists(dirname(__FILE__).'/config.php')) {
+    
+                      // CASE THE FILENAME EXIST (HAS BEEN RENAMED FROM sample_config.txt   TO   config.php)
+                      require_once (dirname(__FILE__).'/config.php') ;
+
+                
+                
+                // for test
+                //echo "FILE EXIST"; ?>
+
+
+
+
+
+
+
+
+
+         <?php if ($filtering_enable != "1") {    
+
+                              ///////////////////////  START:    "BLOCK"  NO FILTERING    /////////////////////////////////////////////
+                              
+                                                    // delete "dragonpay_filtering_mode" cookie
+                                                     Mage::getModel('core/cookie')->delete('dragonpay_filtering_mode') ; 
+                                                     
+                                                     // create "dragonpay_filtering_mode" cookie
+                                                    Mage::getModel('core/cookie')->set('dragonpay_filtering_mode','0') ;   // "0" value mean filtering_mode disabled
+                              
+                              
+                                                   // Display "form/template" for when there is no Filtering mode
+                                                   require_once (dirname(__FILE__).'/nf-block.php') ;
+                                                   
+                             ///////////////////////  END:    "BLOCK"  NO FILTERING    ////////////////////////////////////////////////
+
+
+             } else { ?>     
+           
+     
+     
+           
+           
+<style type="text/css" media="screen">
+.my-li {
+  margin-left:5%;
+  padding-left:0.8%;
+list-style-type: none;
+}
+</style>
+
+
+
+
+
+
+<style type="text/css" media="screen">
+popup-content-on-hover {
+    display: none;
+}
+
+img:hover + popup-content-on-hover {
+    display: block;
+}
+</style>
+
+
+
+
+
+<div class="my-li">            
+
+
+
+<ul class="form-list" id="payment_form_<?php echo $_code ?>" >
+
+       <br>
+
+        <p> <u>Select Sub-Option (Required):  </u></p>
+        
+       <br>
+
+
+
+
+
+
+
+<!--  ////////////////////////////////////////////// GROUP   FILTERING START HERE BELLOW  //////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////   -->
+
+
+
+
+
+<?php  
+//////////////  START:      RESET COOKIE  ///////////////////////
+                   Mage::getModel('core/cookie')->delete('dragonpay_filtering_mode') ; 
+                   
+                  // create "dragonpay_filtering_mode" cookie
+                  Mage::getModel('core/cookie')->set('dragonpay_filtering_mode','not-set-yet-or-missing') ;   
+///////////////  END:     RESET  COOKIE    ////////////////////////
+ ?>
+
+
+
+
+
+
+    
+<!--  /////////////////////////   START:      CREDIT CARDS   /////////////////////////////////////////////////////////////////////////   --> 
+    <?php if ($group_credit_cards_enable == "1") {  ?>
+
+    <li>         
+                <input type="radio" title="<?php echo $this->__('Filtering Mode#') ?>" id="<?php echo $_code ?>_filtering_mode" name="payment[filtering_mode]" value="64" class="radio" />
+                <label for="<?php echo $_code ?>"><font color="<?php echo $group_credit_cards_title_font_html_color ?>"><?php echo $group_credit_cards_title ?></font></label>           
+         
+         
+                        <?php if ($group_credit_cards_enable_logo == "1") {  ?>         
+                                  <br />
+                                             <img style="max-width:80%;height:auto;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $group_credit_cards_logo_path ?>" alt="<?php echo $this->__(''); ?>" />           
+                                                          <?php if ($group_credit_cards_logo_description_enable_popup == "1" AND $group_credit_cards_enable_description == "1") {  ?> 
+                                                                          <popup-content-on-hover><span style="font-weight:normal;"><font color="<?php echo $group_credit_cards_description_font_html_color ?>"><?php echo $group_credit_cards_description ?></font></spam></popup-content-on-hover>   
+                                                          <?php } ?>
+                        <?php } ?>                                  
+                        
+          
+                       <?php if ($group_credit_cards_enable_description == "1" AND $group_credit_cards_logo_description_enable_popup != "1") {  ?>  
+                                     <div style="max-width: 95%;">
+                                               <p><span style="font-weight:normal;"><font color="<?php echo $group_credit_cards_description_font_html_color ?>"><?php echo $group_credit_cards_description ?></font></spam></p>
+                                    </div>
+                       <?php } ?>   
+                 
+    </li>    
+    
+   <?php } ?>
+<!--  /////////////////////////   END:      CREDIT CARDS   /////////////////////////////////////////////////////////////////////////    -->  
+   
+
+
+
+
+
+
+
+
+<!--  /////////////////////////   START:      ONLINE  BANKING    /////////////////////////////////////////////////////////////////////////  -->
+<?php if ($group_online_banking_enable == "1") {  ?>
+
+    <li>         
+                <input type="radio" title="<?php echo $this->__('Filtering Mode#') ?>" id="<?php echo $_code ?>_filtering_mode" name="payment[filtering_mode]" value="1"  class="radio" />
+                <label for="<?php echo $_code ?>"><font color="<?php echo $group_online_banking_title_font_html_color ?>"><?php echo $group_online_banking_title ?></font></label>           
+        
+         
+                        <?php if ($group_online_banking_enable_logo == "1") {  ?>         
+                                   <br />
+                                              <img style="max-width:80%;height:auto;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $group_online_banking_logo_path ?>" alt="<?php echo $this->__(''); ?>" />
+                                                           <?php if ($group_online_banking_logo_description_enable_popup == "1" AND $group_online_banking_enable_description == "1") {  ?> 
+                                                                           <popup-content-on-hover><span style="font-weight:normal;"><font color="<?php echo $group_online_banking_description_font_html_color ?>"><?php echo $group_online_banking_description ?></font></spam></popup-content-on-hover>       
+                                                             <?php } ?>
+                       <?php } ?>         
+                       
+                     
+                        
+                       <?php if ($group_online_banking_enable_description == "1" AND $group_online_banking_logo_description_enable_popup != "1") {  ?>  
+                                     <div style="max-width: 95%;">
+                                               <p><span style="font-weight:normal;"><font color="<?php echo $group_online_banking_description_font_html_color ?>"><?php echo $group_online_banking_description ?></font></spam></p>
+                                    </div>
+                       <?php } ?>   
+                 
+    </li>    
+    
+   <?php } ?>
+<!--  /////////////////////////   END:      ONLINE  BANKING    /////////////////////////////////////////////////////////////////////////   -->   
+      
+
+
+
+
+
+
+
+
+
+<!--  /////////////////////////   START:      OVER-THE-COUNTER BANKING AND ATM   ////////////////////////////////////////////////////////  -->  
+<?php if ($group_over_the_counter_banking_and_ATM_enable == "1") {  ?>
+
+    <li>         
+                <input type="radio" title="<?php echo $this->__('Filtering Mode#') ?>" id="<?php echo $_code ?>_filtering_mode" name="payment[filtering_mode]" value="2" class="radio" />
+                <label for="<?php echo $_code ?>"><font color="<?php echo $group_over_the_counter_banking_and_ATM_title_font_html_color ?>"><?php echo $group_over_the_counter_banking_and_ATM_title ?></font></label>           
+        
+         
+                        <?php if ($group_over_the_counter_banking_and_ATM_enable_logo == "1") {  ?>         
+                                   <br />
+                                        <img style="max-width:80%;height:auto;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $group_over_the_counter_banking_and_ATM_logo_path ?>" alt="<?php echo $this->__(''); ?>" />          
+                                                        <?php if ($group_over_the_counter_banking_and_ATM_logo_description_enable_popup == "1" AND $group_over_the_counter_banking_and_ATM_enable_description == "1") {  ?> 
+                                                                         <popup-content-on-hover><span style="font-weight:normal;"><font color="<?php echo $group_over_the_counter_banking_and_ATM_description_font_html_color ?>"><?php echo $group_over_the_counter_banking_and_ATM_description ?></font></spam></popup-content-on-hover> 
+                                                        <?php } ?>
+                      <?php } ?>                                  
+                        
+          
+                       <?php if ($group_over_the_counter_banking_and_ATM_enable_description == "1" AND $group_over_the_counter_banking_and_ATM_logo_description_enable_popup != "1") {  ?>  
+                                     <div style="max-width: 95%;">
+                                               <p><span style="font-weight:normal;"><font color="<?php echo $group_over_the_counter_banking_and_ATM_description_font_html_color ?>"><?php echo $group_over_the_counter_banking_and_ATM_description ?></font></spam></p>
+                                    </div>
+                       <?php } ?>  
+                 
+    </li>    
+    
+   <?php } ?>
+<!--  /////////////////////////   END:      OVER-THE-COUNTER BANKING AND ATM   /////////////////////////////////////////////////////////  -->
+
+
+
+
+
+
+
+
+
+
+<!--  /////////////////////////   START:      OVER-THE-COUNTER NON BANK   ////////////////////////////////////////////////////////////  -->
+<?php if ($group_over_the_counter_non_bank_enable == "1") {  ?>
+
+    <li>      
+                <input type="radio" title="<?php echo $this->__('Filtering Mode#') ?>" id="<?php echo $_code ?>_filtering_mode" name="payment[filtering_mode]" value="4"  class="radio" />
+                <label for="<?php echo $_code ?>"><font color="<?php echo $group_over_the_counter_non_bank_title_font_html_color ?>"><?php echo $group_over_the_counter_non_bank_title ?></font></label>           
+         
+         
+                        <?php if ($group_over_the_counter_non_bank_enable_logo == "1") {  ?>         
+                                   <br />
+                                        <img style="max-width:80%;height:auto;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $group_over_the_counter_non_bank_logo_path ?>" alt="<?php echo $this->__(''); ?>" />     
+                                                          <?php if ($group_over_the_counter_non_bank_logo_description_enable_popup == "1" AND $group_over_the_counter_non_bank_enable_description == "1") {  ?> 
+                                                                           <popup-content-on-hover><span style="font-weight:normal;"><font color="<?php echo $group_over_the_counter_non_bank_description_font_html_color ?>"><?php echo $group_over_the_counter_non_bank_description ?></font></spam></popup-content-on-hover> 
+                                                          <?php } ?>    
+                      <?php } ?>                                  
+                        
+          
+                       <?php if ($group_over_the_counter_non_bank_enable_description == "1" AND $group_over_the_counter_non_bank_logo_description_enable_popup != "1") {  ?>  
+                                     <div style="max-width: 95%;">
+                                               <p><span style="font-weight:normal;"><font color="<?php echo $group_over_the_counter_non_bank_description_font_html_color ?>"><?php echo $group_over_the_counter_non_bank_description ?></font></spam></p>
+                                    </div>
+                       <?php } ?>  
+       
+    </li>    
+    
+   <?php } ?>
+<!--  /////////////////////////   END:      OVER-THE-COUNTER NON BANK   ////////////////////////////////////////////////////////////  -->
+
+
+
+
+
+    
+ 
+    
+    
+<!--  /////////////////////////   START:      PAYPAL    /////////////////////////////////////////////////////////////////////////  -->
+    <?php if ($group_paypal_enable == "1") {  ?>
+
+    <li>      
+                <input type="radio" title="<?php echo $this->__('Filtering Mode#') ?>" id="<?php echo $_code ?>_filtering_mode" name="payment[filtering_mode]" value="32"  class="radio" />
+                <label for="<?php echo $_code ?>"><font color="<?php echo $group_paypal_title_font_html_color ?>"><?php echo $group_paypal_title ?></font></label>           
+        
+         
+                        <?php if ($group_paypal_enable_logo == "1") {  ?>         
+                                   <br />
+                                        <img style="max-width:80%;height:auto;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $group_paypal_logo_path ?>" alt="<?php echo $this->__(''); ?>" />     
+                                                          <?php if ($group_paypal_logo_description_enable_popup == "1" AND $group_paypal_enable_description =="1") {  ?> 
+                                                                            <popup-content-on-hover><span style="font-weight:normal;"><font color="<?php echo $group_paypal_description_font_html_color ?>"><?php echo $group_paypal_description ?></font></spam></popup-content-on-hover> 
+                                                          <?php } ?> 
+                         <?php } ?>                                  
+                        
+                        
+                       <?php if ($group_paypal_enable_description == "1" AND $group_paypal_logo_description_enable_popup != "1") {  ?>  
+                                     <div style="max-width: 95%;">
+                                               <p><span style="font-weight:normal;"><font color="<?php echo $group_paypal_description_font_html_color ?>"><?php echo $group_paypal_description ?></font></spam></p>
+                                    </div>
+                       <?php } ?>
+     
+    </li>    
+    
+   <?php } ?>
+<!--  /////////////////////////   END:      PAYPAL    /////////////////////////////////////////////////////////////////////////  -->
+
+
+
+    
+    
+
+
+
+
+
+
+<!--  /////////////////////////   START:      MOBILE    /////////////////////////////////////////////////////////////////////////   -->
+<?php if ($group_mobile_enable == "1") {  ?>
+
+   <li>      
+                <input type="radio" title="<?php echo $this->__('Filtering Mode#') ?>" id="<?php echo $_code ?>_filtering_mode" name="payment[filtering_mode]" value="128"  class="radio" />
+                <label for="<?php echo $_code ?>"><font color="<?php echo $group_mobile_title_font_html_color ?>"><?php echo $group_mobile_title ?></font></label>           
+        
+         
+                        <?php if ($group_mobile_enable_logo == "1") {  ?>         
+                                   <br />
+                                        <img style="max-width:80%;height:auto;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $group_mobile_logo_path ?>" alt="<?php echo $this->__(''); ?>" />   
+                                                      <?php if ($group_mobile_logo_description_enable_popup == "1" AND $group_mobile_enable_description =="1") {  ?> 
+                                                                       <popup-content-on-hover><span style="font-weight:normal;"><font color="<?php echo $group_mobile_description_font_html_color ?>"><?php echo $group_mobile_description ?></font></spam></popup-content-on-hover> 
+                                                     <?php } ?>        
+                       <?php } ?>                                  
+                        
+          
+                       <?php if ($group_mobile_enable_description == "1" AND $group_mobile_logo_description_enable_popup != "1") {  ?>  
+                                   <div style="max-width: 95%;">
+                                               <p><span style="font-weight:normal;"><font color="<?php echo $group_mobile_description_font_html_color ?>"><?php echo $group_mobile_description ?></font></spam></p>
+                                    </div>
+                       <?php } ?>   
+          
+    </li>    
+    
+   <?php } ?>
+<!--  /////////////////////////   END:      MOBILE    /////////////////////////////////////////////////////////////////////////    -->
+   
+   
+   
+   
+   
+   
+   
+
+
+   
+<!--  /////////////////////////   START:      INTERNATIONAL  OTC   /////////////////////////////////////////////////////////////////////////   --> 
+   <?php if ($group_international_OTC_enable == "1") {  ?>
+
+   <li>       
+                <input type="radio" title="<?php echo $this->__('Filtering Mode#') ?>" id="<?php echo $_code ?>_filtering_mode" name="payment[filtering_mode]" value="256"  class="radio" />
+                <label for="<?php echo $_code ?>"><font color="<?php echo $group_international_OTC_title_font_html_color ?>"><?php echo $group_international_OTC_title ?></font></label>           
+         
+         
+                        <?php if ($group_international_OTC_enable_logo == "1") {  ?>         
+                                  <br />
+                                        <img style="max-width:80%;height:auto;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $group_international_OTC_logo_path ?>" alt="<?php echo $this->__(''); ?>" />     
+                                                          <?php if ($group_international_OTC_logo_description_enable_popup == "1" AND $group_international_OTC_enable_description =="1") {  ?> 
+                                                                                <popup-content-on-hover><span style="font-weight:normal;"><font color="<?php echo $group_international_OTC_description_font_html_color ?>"><?php echo $group_international_OTC_description ?></font></spam></popup-content-on-hover> 
+                                                          <?php } ?>     
+                       <?php } ?>                                  
+                        
+          
+                       <?php if ($group_international_OTC_enable_description == "1" AND $group_international_OTC_logo_description_enable_popup != "1") {  ?>  
+                                     <div style="max-width: 95%;">
+                                               <p><span style="font-weight:normal;"><font color="<?php echo $group_international_OTC_description_font_html_color ?>"><?php echo $group_international_OTC_description ?></font></spam></p>
+                                    </div>
+                       <?php } ?>                 
+               
+    </li>    
+    
+   <?php } ?>
+<!--  /////////////////////////   END:      INTERNATIONAL  OTC   /////////////////////////////////////////////////////////////////////////  -->
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+<!--  /////////////////////////   START:      FULL CHANNELS   /////////////////////////////////////////////////////////////////////////   --> 
+   <?php if ($group_full_channels_enable == "1") {  ?>
+
+    <li>        
+                <input type="radio" title="<?php echo $this->__('Filtering Mode#') ?>" id="<?php echo $_code ?>_filtering_mode" name="payment[filtering_mode]" value="full_channels"  class="radio" />
+                <label for="<?php echo $_code ?>"><font color="<?php echo $group_full_channels_title_font_html_color ?>"><?php echo $group_full_channels_title ?></font></label>           
+         
+         
+                        <?php if ($group_full_channels_enable_logo == "1") {  ?>         
+                                    <br />
+                                        <img style="max-width:80%;height:auto;" src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) . $group_full_channels_logo_path ?>" alt="<?php echo $this->__(''); ?>" />        
+                                                          <?php if ($group_full_channels_logo_description_enable_popup == "1" AND $group_full_channels_enable_description =="1") {  ?> 
+                                                                           <popup-content-on-hover><span style="font-weight:normal;"><font color="<?php echo $group_full_channels_description_font_html_color ?>"><?php echo $group_full_channels_description ?></font></spam></popup-content-on-hover> 
+                                                           <?php } ?>  
+                         <?php } ?>                                  
+                        
+          
+                       <?php if ($group_full_channels_enable_description == "1" AND $group_full_channels_logo_description_enable_popup != "1") {  ?>                              
+                                     <div style="max-width: 95%;">
+                                               <p><span style="font-weight:normal;"><font color="<?php echo $group_full_channels_description_font_html_color ?>"><?php echo $group_full_channels_description ?></font></spam></p>
+                                    </div>
+                       <?php } ?>                      
+                       
+    </li>    
+    
+       
+   <?php } ?>
+<!--  /////////////////////////   END:      FULL CHANNELS   /////////////////////////////////////////////////////////////////////////  -->
+
+
+
+
+</div>
+
+
+
+
+
+
+    
+    
+    
+</ul>
+
+
+
+
+
+
+
+
+
+<div>
+    <?php echo $this->getMethod()->getConfigData('message');?>
+</div>
+           
+           
+           
+           
+         <?php   }      // END:   $if filtering_enable   is enabled in config.php
+         
+         
+         
+               } else {      
+         
+                        // CASE :    config.php file is not present                    
+                    
+                                             ///////////////////////  START:    "BLOCK"  NO FILTERING    /////////////////////////////////////////////
+                                                        
+                                                               // delete "dragonpay_filtering_mode" cookie
+                                                              Mage::getModel('core/cookie')->delete('dragonpay_filtering_mode') ; 
+                                                              
+                                                             // create "dragonpay_filtering_mode" cookie
+                                                             Mage::getModel('core/cookie')->set('dragonpay_filtering_mode','0') ;   // "0" value mean filtering_mode disabled
+
+
+                                                            // Display "form/template" for when there is no Filtering mode
+                                                             require_once (dirname(__FILE__).'/nf-block.php') ;       
+                                                             
+                                            ///////////////////////  END:    "BLOCK"  NO FILTERING    ////////////////////////////////////////////////
+                
+                
+                                           // for test
+                                           //echo "FILE DO NOT EXIST"; 
+                                           
+                                           
+                                           
+                 // END:   config.php file is not present          
+             }      ?>      
